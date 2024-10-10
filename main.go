@@ -6,20 +6,22 @@ import (
 )
 
 func main() {
+	// Initialize Redis and MongoDB
+	initRedis()
+	initMongoDB()
 
-	// HTTP handlers
-	mux := http.NewServeMux()
-	mux.HandleFunc("/ws", handlerWebSocket)
-	mux.HandleFunc("/healthz", handlerReadiness)
+	// WebSocket route for real-time chat
+	http.HandleFunc("/ws", handlerWebSocket)
 
-	server := &http.Server{
-		Addr:    "8080",
-		Handler: mux,
-	}
+	// HTTP routes for login and message history
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/messages", getMessageHistoryHandler)
+	http.HandleFunc("/ready", handlerReadiness)
 
-	log.Println("Server started at :8080")
-	err := server.ListenAndServe()
+	// Start the server
+	log.Println("Server started at :3000")
+	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
-		log.Fatalf("Could not start error: %v", err)
+		log.Fatal(err)
 	}
 }

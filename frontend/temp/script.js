@@ -2,7 +2,7 @@
 
 // Establish WebSocket connection to the server
 const roomName = 'general';  // or dynamically get the room from user selection
-const ws = new WebSocket(`ws://localhost:8080/ws?room=${roomName}`);
+const ws = new WebSocket(`ws://localhost:3000/ws?room=${roomName}`);
 
 // Event listener for connection opening
 ws.onopen = () => {
@@ -27,7 +27,7 @@ ws.onclose = () => {
 
 // Function to send message to WebSocket server
 function sendMessage() {
-    const inputElement = document.querySelector('input');
+    const inputElement = document.querySelector('message-input');
     const messageText = inputElement.value.trim();
     
     if (messageText === "") return;  // Don't send empty messages

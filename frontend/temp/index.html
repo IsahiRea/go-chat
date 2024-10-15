@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Left Sidebar: User List -->
+        <div class="sidebar">
+            <div class="user-info">
+                <img src="avatar.png" alt="User Avatar" class="avatar">
+                <div class="user-details">
+                    <h4>Logan Smith</h4>
+                    <p>So far, so good!</p>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+            <input type="text" placeholder="Search User" class="search-bar">
+            <ul class="user-list">
+                <li class="user-item">
+                    <img src="avatar.png" alt="User Avatar">
+                    <div>
+                        <h5>Liam Moore</h5>
+                        <p>You: hmm</p>
+                        <span>10:36 PM</span>
+                    </div>
+                </li>
+                <!-- Add more users here -->
+            </ul>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <img src="avatar.png" alt="User Avatar" class="avatar">
+                <div>
+                    <h4>Sophia Carter</h4>
+                    <p>Last seen 16 minutes ago</p>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <div class="message received">
+                    <p>oh hi logan :)</p>
+                    <span>10:28 PM</span>
+                </div>
+                <div class="message sent">
+                    <p>hey!</p>
+                    <span>10:28 PM</span>
+                </div>
+                <!-- Add more messages here -->
+            </div>
+            <div class="message-input">
+                <input type="text" placeholder="Start typing..." maxlength="200">
+                <button>Send</button>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: User Profile -->
+        <div class="profile-sidebar">
+            <img src="avatar.png" alt="Profile Picture" class="profile-avatar">
+            <h4>Sophia Carter</h4>
+            <p>Kind words cost nothing.</p>
+            <div class="profile-info">
+                <p><strong>Created at:</strong> 20-6-2021</p>
+                <p><strong>DOB:</strong> 10-11-1996</p>
+                <p><strong>Phone:</strong> 7014569630</p>
+                <p><strong>Email:</strong> sophia@gmail.com</p>
+                <p><strong>Address:</strong> 3386 Arbutus Drive</p>
+            </div>
+            <button class="block-user">Block User</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

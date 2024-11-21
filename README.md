@@ -98,6 +98,8 @@ ws://localhost:8080/ws?room={roomName}
 │   └── ...
 ├── frontend             
 │   ├── src
+│   ├── public
+│   ├── temp
 │   │   ├── index.html
 │   │   ├── script.js
 │   │   ├── styles.css

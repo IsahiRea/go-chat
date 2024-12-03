@@ -26,6 +26,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO: Create database for User Management
+
 	// Check if the user exists and password matches
 	storedPassword, exists := users[loginReq.Username]
 	if !exists || storedPassword != loginReq.Password {

@@ -42,3 +42,5 @@ func getMessages(room string) ([]Message, error) {
 	err = cursor.All(mongoCtx, &messages)
 	return messages, err
 }
+
+//TODO: Create a Function to register users

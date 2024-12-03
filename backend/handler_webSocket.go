@@ -11,13 +11,12 @@ import (
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true // Allow all origins for simplicity
+		return true
 	},
 }
 
 func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 
-	// Extract the token from the Authorization header
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing token", http.StatusUnauthorized)
@@ -38,7 +37,6 @@ func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	// Parse room from query parameters
 	room := r.URL.Query().Get("room")
 	if room == "" {
 		http.Error(w, "Room not specified", http.StatusBadRequest)
@@ -79,17 +77,14 @@ func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 		// Include the username from the JWT in the message
 		msg.User = username
 
-		// Save message to MongoDB
 		saveMessage(msg)
 
-		// Marshal the Message struct to JSON
 		jsonMsg, err := json.Marshal(msg)
 		if err != nil {
 			log.Println("Error marshaling message to JSON:", err)
 			continue
 		}
 
-		// Broadcast message via Redis
 		publishMessage(msg.Room, jsonMsg)
 
 	}
@@ -97,7 +92,7 @@ func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 
 // Handle request to fetch message history for a room
 func getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	// Extract the token from the Authorization header
+
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing token", http.StatusUnauthorized)
@@ -111,14 +106,12 @@ func getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get the room name from the query parameters
 	room := r.URL.Query().Get("room")
 	if room == "" {
 		http.Error(w, "Room not specified", http.StatusBadRequest)
 		return
 	}
 
-	// Retrieve messages for the room
 	messages, err := getMessages(room)
 	if err != nil {
 		log.Println("Error fetching messages:", err)
@@ -126,7 +119,6 @@ func getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Send the message history as a JSON response
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(messages)
 }

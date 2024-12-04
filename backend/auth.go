@@ -6,6 +6,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+//TODO: Import dotenv to load JWT Secret & Import Bcrypt for Hashing
+
 var jwtSecret = []byte("secret")
 
 // Generate JWT token for a user

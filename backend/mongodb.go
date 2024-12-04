@@ -10,6 +10,7 @@ import (
 )
 
 var mongoClient *mongo.Client
+var userCollection *mongo.Collection
 var messageCollection *mongo.Collection
 var mongoCtx = context.Background()
 
@@ -21,6 +22,7 @@ func initMongoDB() {
 	}
 
 	mongoClient = client
+	userCollection = mongoClient.Database("chat").Collection("users")
 	messageCollection = mongoClient.Database("chat").Collection("messages")
 }
 
@@ -43,4 +45,10 @@ func getMessages(room string) ([]Message, error) {
 	return messages, err
 }
 
-//TODO: Create a Function to register users
+// Save users to MongoDB
+func saveUser(user User) {
+	_, err := userCollection.InsertOne(mongoCtx, user)
+	if err != nil {
+		log.Println("Error saving User to MongoDB:", err)
+	}
+}

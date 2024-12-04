@@ -14,7 +14,8 @@ func main() {
 	http.HandleFunc("/ws", handlerWebSocket)
 
 	// HTTP routes for login and message history
-	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/register", handlerRegister)
+	http.HandleFunc("/login", handlerLogin)
 	http.HandleFunc("/messages", getMessageHistoryHandler)
 	http.HandleFunc("/ready", handlerReadiness)
 

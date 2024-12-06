@@ -18,7 +18,7 @@ type LoginRequest struct {
 }
 
 // LoginHandler - Authenticate the user and return a JWT token
-func handlerLogin(w http.ResponseWriter, r *http.Request) {
+func (cfg *ApiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	var loginReq LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&loginReq)
 	if err != nil {
@@ -35,7 +35,7 @@ func handlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate a JWT token
-	token, err := generateToken(loginReq.Username)
+	token, err := generateToken(loginReq.Username, cfg.jwtSecret)
 	if err != nil {
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
@@ -46,22 +46,27 @@ func handlerLogin(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
 
-func handlerRegister(w http.ResponseWriter, r *http.Request) {
+func (cfg *ApiConfig) handlerRegister(w http.ResponseWriter, r *http.Request) {
 
 	params := RegisterParams{}
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
 		return
 	}
 
-	//TODO: Hash the password
+	hashed, err := HashPassword(params.Password)
+	if err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
 
 	user := User{
 		Username: params.Username,
-		//Password: hashedPassword
+		Password: hashed,
 	}
 
 	saveUser(user)
 
+	//FIXME: JSON
 	//RespondwithJSON()
 	w.WriteHeader(200)
 }

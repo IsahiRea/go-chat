@@ -15,7 +15,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
+func (cfg *ApiConfig) handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
@@ -24,7 +24,7 @@ func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-	username, err := validateToken(tokenStr)
+	username, err := validateToken(tokenStr, cfg.jwtSecret)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
 		return
@@ -91,7 +91,7 @@ func handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handle request to fetch message history for a room
-func getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
+func (cfg *ApiConfig) getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
 
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
@@ -100,7 +100,7 @@ func getMessageHistoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-	_, err := validateToken(tokenStr)
+	_, err := validateToken(tokenStr, cfg.jwtSecret)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
 		return

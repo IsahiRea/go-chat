@@ -1,17 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
-//TODO: Import dotenv to load JWT Secret & Import Bcrypt for Hashing
-
-var jwtSecret = []byte("secret")
-
 // Generate JWT token for a user
-func generateToken(username string) (string, error) {
+func generateToken(username, jwtSecret string) (string, error) {
 	claims := jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
@@ -21,7 +19,7 @@ func generateToken(username string) (string, error) {
 }
 
 // Parse and validate JWT token
-func validateToken(tokenStr string) (string, error) {
+func validateToken(tokenStr, jwtSecret string) (string, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
@@ -31,4 +29,27 @@ func validateToken(tokenStr string) (string, error) {
 	} else {
 		return "", err
 	}
+}
+
+func HashPassword(password string) (string, error) {
+
+	bytePassword := []byte(password)
+	hash, err := bcrypt.GenerateFromPassword(bytePassword, 10)
+	if err != nil {
+		return "", fmt.Errorf("error hashing")
+	}
+
+	return string(hash), nil
+}
+
+func CheckPasswordHash(password, hash string) error {
+
+	bytePassword := []byte(password)
+	byteHash := []byte(hash)
+
+	if err := bcrypt.CompareHashAndPassword(byteHash, bytePassword); err != nil {
+		return fmt.Errorf("error password mismatch")
+	}
+
+	return nil
 }

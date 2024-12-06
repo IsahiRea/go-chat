@@ -11,7 +11,7 @@ type Message struct {
 // User struct for authenticated users
 type User struct {
 	Username string `json:"username"`
-	//Password string `json:"password"`
+	Password string `json:"password"`
 	//Token    string `json:"token"`
 }
 

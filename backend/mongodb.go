@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,6 +21,12 @@ func initMongoDB() {
 	if err != nil {
 		log.Fatal("Failed to connect to MongoDB:", err)
 	}
+
+	defer func() {
+		if err := client.Disconnect(mongoCtx); err != nil {
+			panic(err)
+		}
+	}()
 
 	mongoClient = client
 	userCollection = mongoClient.Database("chat").Collection("users")
@@ -51,4 +58,21 @@ func saveUser(user User) {
 	if err != nil {
 		log.Println("Error saving User to MongoDB:", err)
 	}
+}
+
+// TODO: Test the Implementation
+func getUser(username string) (User, bool) {
+
+	var result User
+	filter := bson.M{"username": username}
+
+	err := userCollection.FindOne(mongoCtx, filter).Decode(&result)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return User{}, false
+	} else if err != nil {
+		return User{}, false
+	}
+
+	return result, true
+
 }

@@ -11,12 +11,6 @@ var users = map[string]string{
 	"user2": "password2",
 }
 
-// Request body for login
-type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 // LoginHandler - Authenticate the user and return a JWT token
 func (cfg *ApiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	var loginReq LoginRequest
@@ -26,10 +20,17 @@ func (cfg *ApiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO: Change check for future database implementation
+	//storedPassword, exists := users[loginReq.Username]
+
 	// Check if the user exists and password matches
-	storedPassword, exists := users[loginReq.Username]
-	if !exists || storedPassword != loginReq.Password {
+	user, exists := getUser(loginReq.Username)
+	if !exists {
+		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+		return
+	}
+
+	err = CheckPasswordHash(loginReq.Password, user.Password)
+	if err != nil {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}

@@ -34,7 +34,7 @@ func validateToken(tokenStr, jwtSecret string) (string, error) {
 func HashPassword(password string) (string, error) {
 
 	bytePassword := []byte(password)
-	hash, err := bcrypt.GenerateFromPassword(bytePassword, 10)
+	hash, err := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("error hashing")
 	}

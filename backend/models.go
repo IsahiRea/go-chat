@@ -15,6 +15,10 @@ type User struct {
 	//Token    string `json:"token"`
 }
 
+type Token struct {
+	Token string `json:"token"`
+}
+
 type RegisterParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`

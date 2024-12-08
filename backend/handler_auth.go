@@ -6,10 +6,10 @@ import (
 )
 
 // Dummy user authentication for simplicity
-var users = map[string]string{
-	"user1": "password1",
-	"user2": "password2",
-}
+// var users = map[string]string{
+// 	"user1": "password1",
+// 	"user2": "password2",
+// }
 
 // LoginHandler - Authenticate the user and return a JWT token
 func (cfg *ApiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,9 @@ func (cfg *ApiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Send the token as a response
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"token": token})
+	json.NewEncoder(w).Encode(Token{
+		Token: token,
+	})
 }
 
 func (cfg *ApiConfig) handlerRegister(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +69,5 @@ func (cfg *ApiConfig) handlerRegister(w http.ResponseWriter, r *http.Request) {
 
 	saveUser(user)
 
-	//FIXME: JSON
-	//RespondwithJSON()
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 }
